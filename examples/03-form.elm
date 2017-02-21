@@ -1,7 +1,7 @@
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onInput)
-
+import String exposing (..)
 
 main =
   Html.beginnerProgram
@@ -71,9 +71,11 @@ viewValidation : Model -> Html Msg
 viewValidation model =
   let
     (color, message) =
-      if model.password == model.passwordAgain then
+      if (model.password == model.passwordAgain) && (length model.password >= 8) then
         ("green", "OK")
-      else
+      else if (model.password /= model.passwordAgain) then
         ("red", "Passwords do not match!")
+      else
+        ("red", "Password needs to be at least 8 characters!")
   in
     div [ style [("color", color)] ] [ text message ]
