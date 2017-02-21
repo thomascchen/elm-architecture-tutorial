@@ -57,14 +57,17 @@ update msg model =
 view : Model -> Html Msg
 view model =
   div []
-    [ input [ type_ "text", placeholder "Name", onInput Name ] []
-    , input [ type_ "password", placeholder "Password", onInput Password ] []
-    , input [ type_ "password", placeholder "Re-enter Password", onInput PasswordAgain ] []
+    [ viewInput "text" "Name" Name
+    , viewInput "password" "Password" Password
+    , viewInput "password" "Re-enter Password" PasswordAgain
     , viewValidation model
     ]
 
+viewInput : String -> String -> (String -> Msg) -> Html Msg
+viewInput inputType placeholderText updateFunction =
+    input [ type_ inputType, placeholder placeholderText, onInput updateFunction ] []
 
-viewValidation : Model -> Html msg
+viewValidation : Model -> Html Msg
 viewValidation model =
   let
     (color, message) =
