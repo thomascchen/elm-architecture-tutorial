@@ -17,7 +17,8 @@ main =
 
 
 type alias Model =
-  { name : String
+  { age: String
+  , name : String
   , password : String
   , passwordAgain : String
   }
@@ -25,7 +26,7 @@ type alias Model =
 
 model : Model
 model =
-  Model "" "" ""
+  Model "" "" "" ""
 
 
 
@@ -33,7 +34,8 @@ model =
 
 
 type Msg
-    = Name String
+    = Age String
+    | Name String
     | Password String
     | PasswordAgain String
 
@@ -41,6 +43,9 @@ type Msg
 update : Msg -> Model -> Model
 update msg model =
   case msg of
+    Age age ->
+      { model | age = age }
+
     Name name ->
       { model | name = name }
 
@@ -61,6 +66,7 @@ view model =
     [ viewInput "text" "Name" Name
     , viewInput "password" "Password" Password
     , viewInput "password" "Re-enter Password" PasswordAgain
+    , viewInput "age" "Age" Age
     , viewValidation model
     ]
 
@@ -76,7 +82,8 @@ viewValidation model =
         && (length model.password >= 8)
         && (Regex.contains (Regex.regex "[a-z]") model.password == True )
         && (Regex.contains (Regex.regex "[A-Z]") model.password == True )
-        && (Regex.contains (Regex.regex "[0-9]") model.password == True ) then
+        && (Regex.contains (Regex.regex "[0-9]") model.password == True )
+        && (Regex.contains (Regex.regex "^[0-9]*$") model.age == True ) then
           ("green", "OK")
       else if (model.password /= model.passwordAgain) then
         ("red", "Passwords do not match!")
@@ -86,6 +93,8 @@ viewValidation model =
         ("red", "Password must contain lower case characters")
       else if (Regex.contains (Regex.regex "[A-Z]") model.password == False) then
         ("red", "Password must contain upper case characters")
+      else if (Regex.contains (Regex.regex "^[0-9]*$") model.age == False) then
+        ("red", "Age must be a number")
       else
         ("red", "Password must container numeric characters")
   in
